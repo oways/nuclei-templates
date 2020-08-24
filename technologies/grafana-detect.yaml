@@ -1,0 +1,45 @@
+id: grafana-detect
+
+info:
+  name: Grafana detect
+  author: 0w4ys
+  severity: info
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/public/img/browserconfig.xml"
+      - "{{BaseURL}}/grafana/public/img/browserconfig.xml"
+      - "{{BaseURL}}/~/grafana/public/img/browserconfig.xml"
+    headers:
+      User-Agent: "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0"
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "msapplication"
+          - "public/img/"
+        condition: and
+        part: body
+      - type: status
+        status:
+          - 200
+  - raw:
+      - |
+          GET /public/img/browserconfig.xml HTTP/1.1
+          Host: {{Hostname}}:3000
+          Accept: */*
+          Accept-Language: e
+          User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0
+          Pragma: no-cache
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "msapplication"
+          - "public/img/"
+        condition: and
+        part: body
+      - type: status
+        status:
+          - 200
